@@ -4,16 +4,17 @@ export const OLLAMA_MODEL = "gemma3:1b";
 export const PAGE_SIZE = 20;
 
 export const CATEGORY_MAP = [
-  { label: "All Electronics",        display: "Electronics",           emoji: "📱", color: "#1a1a2e" },
-  { label: "Home & Kitchen",         display: "Home & Kitchen",        emoji: "🏠", color: "#1e3a2f" },
-  { label: "Automotive",             display: "Automotive",            emoji: "🚗", color: "#2a1a0e" },
-  { label: "Tools & Home Improvement", display: "Tools & DIY",         emoji: "🔧", color: "#1a2a1a" },
-  { label: "Sports & Outdoors",      display: "Sports & Outdoors",     emoji: "⚽", color: "#0e2233" },
-  { label: "Health & Personal Care", display: "Health & Beauty",       emoji: "💊", color: "#2a1a2a" },
-  { label: "Office Products",        display: "Office Products",       emoji: "🗂️", color: "#1a1a1a" },
-  { label: "Toys & Games",           display: "Toys & Games",          emoji: "🧸", color: "#2a1e0a" },
-  { label: "AMAZON FASHION",         display: "Fashion",               emoji: "👕", color: "#2a0a1a" },
-  { label: "Industrial & Scientific",display: "Industrial",            emoji: "⚗️", color: "#0a1a2a" },
+  { label: "All Electronics",          display: "Electronics",       emoji: "📱", color: "#1a1a2e" },
+  { label: "Amazon Home",              display: "Home & Kitchen",    emoji: "🏠", color: "#1e3a2f" },
+  { label: "Home & Kitchen",           display: "Home & Kitchen",    emoji: "🏠", color: "#1e3a2f" },
+  { label: "Automotive",               display: "Automotive",        emoji: "🚗", color: "#2a1a0e" },
+  { label: "Tools & Home Improvement", display: "Tools & DIY",       emoji: "🔧", color: "#1a2a1a" },
+  { label: "Sports & Outdoors",        display: "Sports & Outdoors", emoji: "⚽", color: "#0e2233" },
+  { label: "Health & Personal Care",   display: "Health & Beauty",   emoji: "💊", color: "#2a1a2a" },
+  { label: "Office Products",          display: "Office Products",   emoji: "🗂️", color: "#1a1a1a" },
+  { label: "Toys & Games",             display: "Toys & Games",      emoji: "🧸", color: "#2a1e0a" },
+  { label: "AMAZON FASHION",           display: "Fashion",           emoji: "👕", color: "#2a0a1a" },
+  { label: "Industrial & Scientific",  display: "Industrial",        emoji: "⚗️", color: "#0a1a2a" },
 ];
 
 export const SORT_OPTIONS = [
