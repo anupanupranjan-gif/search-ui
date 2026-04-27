@@ -21,6 +21,7 @@ export default function ResultsLayout({
   onFilterChange,
   onPageChange,
   chatResults,
+  askAnswer,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -61,6 +62,33 @@ export default function ResultsLayout({
             <Badge color="#131921" textColor="#ff9900">{mode}</Badge>
           )}
         </div>
+
+        {/* AI Answer box */}
+        {askAnswer && (
+          <div style={{
+            background: "linear-gradient(135deg, #131921 0%, #1e2a35 100%)",
+            border: "1px solid rgba(255,153,0,0.3)",
+            borderLeft: "4px solid #ff9900",
+            borderRadius: 8, padding: "20px 24px", marginBottom: 20,
+            animation: "fadeIn 0.3s ease",
+          }}>
+            <div style={{
+              fontSize: 11, color: "#ff9900", fontFamily: "'DM Mono', monospace",
+              letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 10,
+            }}>
+              ✦ AI Answer
+            </div>
+            <div style={{
+              fontSize: 14, color: "#e0e0e0", lineHeight: 1.8,
+              fontFamily: "'Lora', serif", whiteSpace: "pre-wrap",
+            }}>
+              {askAnswer}
+            </div>
+            <div style={{ fontSize: 11, color: "#555", marginTop: 10, fontFamily: "'DM Mono', monospace" }}>
+              Based on {results.length} products · gemma3:1b · local
+            </div>
+          </div>
+        )}
 
         {/* Error */}
         {error && (

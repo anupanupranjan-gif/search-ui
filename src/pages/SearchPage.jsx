@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchSearch } from "../api";
+import { fetchSearch, fetchAsk } from "../api";
 import ResultsLayout from "../components/ResultsLayout";
 
 export default function SearchPage({ mode, chatResults, onResultsChange }) {
@@ -18,24 +18,39 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(0);
 
+  const [askAnswer, setAskAnswer] = useState(null);
+  const [askMode, setAskMode] = useState("answer");
+
   const doSearch = useCallback(async (opts = {}) => {
     const q = opts.q ?? query;
     if (!q?.trim()) return;
     setLoading(true);
     setError(null);
+    setAskAnswer(null);
     try {
-      const data = await fetchSearch({
-        q,
-        mode,
-        page: opts.page ?? page,
-        brand: opts.brand ?? brand,
-        minPrice: opts.minPrice ?? minPrice,
-        maxPrice: opts.maxPrice ?? maxPrice,
-      });
-      setTotal(data.total ?? 0);
-      setTookMs(data.tookMs ?? null);
-      setResults(data.hits ?? []);
-      onResultsChange?.(data.hits ?? [], q);
+      const currentMode = opts.mode ?? mode;
+      if (currentMode === "ask") {
+        const data = await fetchAsk({ q, mode: "hybrid" });
+        setTotal(data.total ?? 0);
+        setTookMs(data.tookMs ?? null);
+        setResults(data.products ?? []);
+        setAskAnswer(data.answer ?? null);
+        setAskMode(data.mode ?? "answer");
+        onResultsChange?.(data.products ?? [], q);
+      } else {
+        const data = await fetchSearch({
+          q,
+          mode: currentMode,
+          page: opts.page ?? page,
+          brand: opts.brand ?? brand,
+          minPrice: opts.minPrice ?? minPrice,
+          maxPrice: opts.maxPrice ?? maxPrice,
+        });
+        setTotal(data.total ?? 0);
+        setTookMs(data.tookMs ?? null);
+        setResults(data.hits ?? []);
+        onResultsChange?.(data.hits ?? [], q);
+      }
     } catch (e) {
       setError(e.message.includes("fetch") ? "Cannot connect to search API." : e.message);
       setResults([]);
@@ -79,6 +94,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
       mode={mode}
       onFilterChange={handleFilterChange}
       onPageChange={handlePageChange}
+      askAnswer={askAnswer}
     />
   );
 }

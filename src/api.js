@@ -30,7 +30,17 @@ export const SEARCH_MODES = [
   { id: "hybrid",  label: "Hybrid",  desc: "BM25 + Vector" },
   { id: "vector",  label: "Semantic", desc: "Vector only" },
   { id: "keyword", label: "Keyword", desc: "BM25 only" },
+  { id: "ask",     label: "Ask AI",  desc: "RAG answer" },
 ];
+
+export async function fetchAsk({ q, mode, category, compare }) {
+  const params = new URLSearchParams({ q, mode: mode || "hybrid" });
+  if (category) params.set("category", category);
+  if (compare) params.set("compare", "true");
+  const res = await fetch(`${API_BASE}/ask?${params}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
 
 export function getCategoryEmoji(category) {
   if (!category) return "📦";
