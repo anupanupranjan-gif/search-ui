@@ -1,7 +1,12 @@
-export const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8081/api/v1";
+export const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost/api/v1";
 export const OLLAMA_BASE = process.env.REACT_APP_OLLAMA_BASE || "http://localhost:11434";
 export const OLLAMA_MODEL = "gemma3:1b";
 export const PAGE_SIZE = 20;
+
+const API_HEADERS = {
+  "X-API-Key": "searchx-dev-key-2026",
+  "Content-Type": "application/json",
+};
 
 export const CATEGORY_MAP = [
   { label: "All Electronics",          display: "Electronics",       emoji: "📱", color: "#1a1a2e" },
@@ -37,7 +42,7 @@ export async function fetchAsk({ q, mode, category, compare }) {
   const params = new URLSearchParams({ q, mode: mode || "hybrid" });
   if (category) params.set("category", category);
   if (compare) params.set("compare", "true");
-  const res = await fetch(`${API_BASE}/ask?${params}`);
+  const res = await fetch(`${API_BASE}/ask?${params}`, { headers: API_HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
@@ -79,7 +84,7 @@ export async function fetchSearch({ q, mode, page, category, brand, minPrice, ma
   if (brand) params.set("brand", brand);
   if (minPrice) params.set("minPrice", minPrice);
   if (maxPrice) params.set("maxPrice", maxPrice);
-  const res = await fetch(`${API_BASE}/search?${params}`);
+  const res = await fetch(`${API_BASE}/search?${params}`, { headers: API_HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
