@@ -20,6 +20,8 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
 
   const [askAnswer, setAskAnswer] = useState(null);
   const [askMode, setAskMode] = useState("answer");
+  const [rewrittenQuery, setRewrittenQuery] = useState(null);
+  const [originalQuery, setOriginalQuery] = useState(null);
 
   const doSearch = useCallback(async (opts = {}) => {
     const q = opts.q ?? query;
@@ -45,10 +47,13 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
           brand: opts.brand ?? brand,
           minPrice: opts.minPrice ?? minPrice,
           maxPrice: opts.maxPrice ?? maxPrice,
+          rewrite: true,
         });
         setTotal(data.total ?? 0);
         setTookMs(data.tookMs ?? null);
         setResults(data.hits ?? []);
+        setRewrittenQuery(data.rewrittenQuery ?? null);
+        setOriginalQuery(data.originalQuery ?? null);
         onResultsChange?.(data.hits ?? [], q);
       }
     } catch (e) {
@@ -95,6 +100,8 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
       onFilterChange={handleFilterChange}
       onPageChange={handlePageChange}
       askAnswer={askAnswer}
+      rewrittenQuery={rewrittenQuery}
+      originalQuery={originalQuery}
     />
   );
 }

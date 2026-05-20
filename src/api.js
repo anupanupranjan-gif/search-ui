@@ -78,12 +78,13 @@ export function sortResults(hits, sortId) {
   }
 }
 
-export async function fetchSearch({ q, mode, page, category, brand, minPrice, maxPrice }) {
+export async function fetchSearch({ q, mode, page, category, brand, minPrice, maxPrice, rewrite }) {
   const params = new URLSearchParams({ q, mode, size: PAGE_SIZE, page });
   if (category) params.set("category", category);
   if (brand) params.set("brand", brand);
   if (minPrice) params.set("minPrice", minPrice);
   if (maxPrice) params.set("maxPrice", maxPrice);
+  if (rewrite) params.set("rewrite", "true");
   const res = await fetch(`${API_BASE}/search?${params}`, { headers: API_HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();

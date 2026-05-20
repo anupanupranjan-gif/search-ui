@@ -22,6 +22,8 @@ export default function ResultsLayout({
   onPageChange,
   chatResults,
   askAnswer,
+  rewrittenQuery,
+  originalQuery,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -63,6 +65,27 @@ export default function ResultsLayout({
           )}
         </div>
 
+        {/* Query Rewrite Banner */}
+        {rewrittenQuery && (
+          <div style={{
+            background: "linear-gradient(135deg, #0f3460 0%, #16213e 100%)",
+            border: "1px solid rgba(100,160,255,0.3)",
+            borderRadius: 8,
+            padding: "10px 16px",
+            marginBottom: 12,
+            fontSize: 13,
+          }}>
+            <div style={{ color: "#64a0ff", fontWeight: 700, marginBottom: 4 }}>
+              🤖 AI Query Rewrite — powered by Ollama (gemma3)
+            </div>
+            <div style={{ color: "#aaa" }}>
+              <span style={{ color: "#fff" }}>Original:</span> "{originalQuery}"
+            </div>
+            <div style={{ color: "#aaa", marginTop: 2 }}>
+              <span style={{ color: "#64a0ff" }}>Rewritten:</span> <span style={{ color: "#e0e0e0" }}>{rewrittenQuery}</span>
+            </div>
+          </div>
+        )}
         {/* AI Answer box */}
         {askAnswer && (
           <div style={{
