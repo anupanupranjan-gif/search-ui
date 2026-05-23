@@ -42,6 +42,7 @@ function AppShell() {
     return params.get("q") || "";
   });
   const [mode, setMode] = useState("hybrid");
+  const [rewrite, setRewrite] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatResults, setChatResults] = useState([]);
   const [chatQuery, setChatQuery] = useState("");
@@ -73,6 +74,8 @@ function AppShell() {
           chatOpen={chatOpen}
           onChatToggle={() => setChatOpen(o => !o)}
           onLogoClick={() => navigate("/")}
+          rewrite={rewrite}
+          onRewriteToggle={() => setRewrite(r => !r)}
         />
       )}
 
@@ -103,6 +106,7 @@ function AppShell() {
             <SearchPage
               mode={mode}
               onResultsChange={handleResultsChange}
+              rewrite={rewrite}
             />
           }
         />

@@ -24,6 +24,8 @@ export default function ResultsLayout({
   askAnswer,
   rewrittenQuery,
   originalQuery,
+  facets,
+  category,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -36,7 +38,9 @@ export default function ResultsLayout({
         brand={brand}
         minPrice={minPrice}
         maxPrice={maxPrice}
+        category={category}
         onFilterChange={onFilterChange}
+        facets={facets}
       />
 
       <main style={{ flex: 1, padding: "16px 20px", minWidth: 0 }}>

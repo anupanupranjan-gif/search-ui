@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { fetchSearch, fetchAsk } from "../api";
 import ResultsLayout from "../components/ResultsLayout";
 
-export default function SearchPage({ mode, chatResults, onResultsChange }) {
+export default function SearchPage({ mode, chatResults, onResultsChange, rewrite }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
 
@@ -14,6 +14,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
   const [error, setError] = useState(null);
   const [sort, setSort] = useState("relevant");
   const [brand, setBrand] = useState("");
+  const [category, setCategory] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(0);
@@ -22,6 +23,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
   const [askMode, setAskMode] = useState("answer");
   const [rewrittenQuery, setRewrittenQuery] = useState(null);
   const [originalQuery, setOriginalQuery] = useState(null);
+  const [facets, setFacets] = useState(null);
 
   const doSearch = useCallback(async (opts = {}) => {
     const q = opts.q ?? query;
@@ -45,15 +47,17 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
           mode: currentMode,
           page: opts.page ?? page,
           brand: opts.brand ?? brand,
+          category: opts.category ?? category,
           minPrice: opts.minPrice ?? minPrice,
           maxPrice: opts.maxPrice ?? maxPrice,
-          rewrite: true,
+          rewrite: rewrite ?? false,
         });
         setTotal(data.total ?? 0);
         setTookMs(data.tookMs ?? null);
         setResults(data.hits ?? []);
         setRewrittenQuery(data.rewrittenQuery ?? null);
         setOriginalQuery(data.originalQuery ?? null);
+        setFacets(data.facets ?? null);
         onResultsChange?.(data.hits ?? [], q);
       }
     } catch (e) {
@@ -62,7 +66,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
     } finally {
       setLoading(false);
     }
-  }, [query, mode, page, brand, minPrice, maxPrice, onResultsChange]);
+  }, [query, mode, page, brand, category, minPrice, maxPrice, onResultsChange]);
 
   useEffect(() => {
     if (query) doSearch({ q: query, page: 0 });
@@ -71,6 +75,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
   const handleFilterChange = (key, value) => {
     if (key === "sort") { setSort(value); return; }
     if (key === "brand") { setBrand(value); doSearch({ brand: value, page: 0 }); }
+    if (key === "category") { setCategory(value); doSearch({ category: value, page: 0 }); }
     if (key === "minPrice") { setMinPrice(value); doSearch({ minPrice: value, page: 0 }); }
     if (key === "maxPrice") { setMaxPrice(value); doSearch({ maxPrice: value, page: 0 }); }
     setPage(0);
@@ -93,6 +98,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
       error={error}
       sort={sort}
       brand={brand}
+      category={category}
       minPrice={minPrice}
       maxPrice={maxPrice}
       page={page}
@@ -102,6 +108,8 @@ export default function SearchPage({ mode, chatResults, onResultsChange }) {
       askAnswer={askAnswer}
       rewrittenQuery={rewrittenQuery}
       originalQuery={originalQuery}
+      facets={facets}
+      category={category}
     />
   );
 }

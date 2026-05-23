@@ -1,6 +1,6 @@
 import { SEARCH_MODES } from "../api";
 
-export default function Header({ query, onQueryChange, onSearch, mode, onModeChange, chatOpen, onChatToggle, onLogoClick }) {
+export default function Header({ query, onQueryChange, onSearch, mode, onModeChange, chatOpen, onChatToggle, onLogoClick, rewrite, onRewriteToggle }) {
   return (
     <header style={{
       background: "#131921", padding: "10px 20px",
@@ -76,6 +76,18 @@ export default function Header({ query, onQueryChange, onSearch, mode, onModeCha
           >{m.label}</button>
         ))}
       </div>
+        <button
+          onClick={onRewriteToggle}
+          title="Toggle AI query rewriting via Ollama"
+          style={{
+            background: rewrite ? "#7c3aed" : "rgba(255,255,255,0.1)",
+            border: "none", borderRadius: 4, padding: "6px 12px",
+            color: rewrite ? "#fff" : "#aaa",
+            fontSize: 11, fontWeight: 700, cursor: "pointer",
+            fontFamily: "'DM Mono', monospace", letterSpacing: 0.3,
+            transition: "all 0.15s", marginLeft: 8,
+          }}
+        >🤖 AI Rewrite {rewrite ? "ON" : "OFF"}</button>
     </header>
   );
 }
