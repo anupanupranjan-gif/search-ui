@@ -90,6 +90,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
   return (
     <ResultsLayout
       title={`Results for "${query}"`}
+      query={query}
       subtitle
       results={results}
       total={total}

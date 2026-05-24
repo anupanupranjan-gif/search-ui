@@ -1,8 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import FacetSidebar from "../components/FacetSidebar";
 import { ProductCard, ProductModal } from "../components/ProductComponents";
 import { Badge } from "../components/ProductComponents";
-import { sortResults, PAGE_SIZE } from "../api";
+import { sortResults, PAGE_SIZE, fetchClick } from "../api";
 
 export default function ResultsLayout({
   title,
@@ -26,8 +26,14 @@ export default function ResultsLayout({
   originalQuery,
   facets,
   category,
+  query,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const sessionId = useRef(Math.random().toString(36).slice(2)).current;
+  const handleProductClick = useCallback((hit, position) => {
+    fetchClick({ sessionId, query, productId: hit.productId, productTitle: hit.title, position });
+    setSelectedProduct(hit);
+  }, [sessionId, query]);
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const sorted = sortResults(results, sort);
 
@@ -167,7 +173,7 @@ export default function ResultsLayout({
                 hit={hit}
                 rank={i + 1}
                 sort={sort}
-                onClick={setSelectedProduct}
+                onClick={(hit) => handleProductClick(hit, i + 1)}
               />
             ))}
           </div>

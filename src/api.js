@@ -89,3 +89,16 @@ export async function fetchSearch({ q, mode, page, category, brand, minPrice, ma
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
+
+export async function fetchClick({ sessionId, query, productId, productTitle, position }) {
+  try {
+    await fetch(`${API_BASE}/click`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId, query, productId, productTitle, position }),
+    });
+  } catch (e) {
+    // fire and forget — don't block the UI on click tracking failures
+    console.debug("Click tracking failed:", e.message);
+  }
+}
