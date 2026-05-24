@@ -109,7 +109,6 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
       rewrittenQuery={rewrittenQuery}
       originalQuery={originalQuery}
       facets={facets}
-      category={category}
     />
   );
 }
