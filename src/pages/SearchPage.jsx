@@ -6,6 +6,7 @@ import ResultsLayout from "../components/ResultsLayout";
 export default function SearchPage({ mode, chatResults, onResultsChange, rewrite }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
+  const refreshKey = searchParams.get("_r");
 
   const [results, setResults] = useState([]);
   const [total, setTotal] = useState(0);
@@ -70,7 +71,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
 
   useEffect(() => {
     if (query) doSearch({ q: query, page: 0 });
-  }, [query, mode]);
+  }, [query, mode, refreshKey]);
 
   const handleFilterChange = (key, value) => {
     if (key === "sort") { setSort(value); return; }

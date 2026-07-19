@@ -52,7 +52,14 @@ function AppShell() {
   const handleSearch = (q) => {
     if (!q?.trim()) return;
     setQuery(q);
-    navigate(`/search?q=${encodeURIComponent(q.trim())}`);
+    const trimmed = q.trim();
+    const currentParams = new URLSearchParams(location.search);
+    // Re-clicking search with the same query text on the same results page is a
+    // no-op navigation (URL doesn't change), so SearchPage's effect never re-fires
+    // and rule/facet changes never get picked up. Force a distinct URL in that case.
+    const samePage = location.pathname === "/search" && currentParams.get("q") === trimmed;
+    const suffix = samePage ? `&_r=${Date.now()}` : "";
+    navigate(`/search?q=${encodeURIComponent(trimmed)}${suffix}`);
   };
 
   const handleResultsChange = (results, q) => {
