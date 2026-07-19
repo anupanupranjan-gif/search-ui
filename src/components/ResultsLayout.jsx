@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import FacetSidebar from "../components/FacetSidebar";
 import { ProductCard, ProductModal } from "../components/ProductComponents";
 import { Badge } from "../components/ProductComponents";
-import { sortResults, PAGE_SIZE, fetchClick } from "../api";
+import { sortResults, PAGE_SIZE, fetchClick, getSessionId } from "../api";
 
 export default function ResultsLayout({
   title,
@@ -29,7 +29,7 @@ export default function ResultsLayout({
   query,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const sessionId = useRef(Math.random().toString(36).slice(2)).current;
+  const sessionId = getSessionId();
   const handleProductClick = useCallback((hit, position) => {
     fetchClick({ sessionId, query, productId: hit.productId, productTitle: hit.title, position });
     setSelectedProduct(hit);

@@ -3,6 +3,23 @@ export const OLLAMA_BASE = process.env.REACT_APP_OLLAMA_BASE || "http://localhos
 export const OLLAMA_MODEL = "gemma3:1b";
 export const PAGE_SIZE = 20;
 
+// Stable per-visit session id — generated once and kept in sessionStorage so
+// searches and clicks within the same tab/visit share one id (survives page
+// navigation, cleared on tab close). Ties NexaRank's click-history
+// personalization to a coherent visit instead of a fresh id per component mount.
+const SESSION_STORAGE_KEY = "nexarank_session_id";
+
+export function getSessionId() {
+  let id = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  if (!id) {
+    id = (typeof crypto !== "undefined" && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    sessionStorage.setItem(SESSION_STORAGE_KEY, id);
+  }
+  return id;
+}
+
 const API_HEADERS = {
   "X-API-Key": "searchx-dev-key-2026",
   "Content-Type": "application/json",
@@ -79,7 +96,7 @@ export function sortResults(hits, sortId) {
 }
 
 export async function fetchSearch({ q, mode, page, category, brand, minPrice, maxPrice, rewrite }) {
-  const params = new URLSearchParams({ q, mode, size: PAGE_SIZE, page });
+  const params = new URLSearchParams({ q, mode, size: PAGE_SIZE, page, sessionId: getSessionId() });
   if (category) params.set("category", category);
   if (brand) params.set("brand", brand);
   if (minPrice) params.set("minPrice", minPrice);
