@@ -36,6 +36,10 @@ export default function ResultsLayout({
   }, [sessionId, query]);
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const sorted = sortResults(results, sort);
+  // Match % is relative to the top score on this page, not an absolute scale —
+  // keyword (BM25), vector (cosine), and hybrid (RRF) scores all live on very
+  // different ranges, so a fixed formula can't work across all three.
+  const maxScore = Math.max(0, ...results.map((h) => h.score || 0));
 
   return (
     <div style={{ display: "flex", minHeight: "calc(100vh - 56px)" }}>
@@ -173,6 +177,7 @@ export default function ResultsLayout({
                 hit={hit}
                 rank={i + 1}
                 sort={sort}
+                maxScore={maxScore}
                 onClick={(hit) => handleProductClick(hit, i + 1)}
               />
             ))}

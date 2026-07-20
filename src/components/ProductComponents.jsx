@@ -28,10 +28,10 @@ export function Badge({ children, color = "#e8f0fe", textColor = "#1a73e8" }) {
   );
 }
 
-export function ProductCard({ hit, rank, sort, onClick }) {
+export function ProductCard({ hit, rank, sort, maxScore, onClick }) {
   const [hovered, setHovered] = useState(false);
   const isBestseller = sort === "bestseller" || (rank <= 3 && sort === "recommended");
-  const scorePercent = hit.score ? Math.min(100, Math.round(hit.score * 5)) : null;
+  const scorePercent = maxScore ? Math.round((hit.score / maxScore) * 100) : null;
 
   return (
     <div
@@ -72,6 +72,15 @@ export function ProductCard({ hit, rank, sort, onClick }) {
         {hit.category && (
           <Badge color="#f0f0f0" textColor="#555">{hit.category?.split(" ")[0]}</Badge>
         )}
+        {hit.semanticMatch && (
+          <span title="Found via semantic (vector) similarity — keyword search alone wouldn't have surfaced this product"
+            style={{
+              background: "#f0e8fc", color: "#7c3aed",
+              fontSize: 10, fontWeight: 700, padding: "2px 7px",
+              borderRadius: 3, letterSpacing: 0.5, textTransform: "uppercase",
+              fontFamily: "'DM Mono', monospace",
+            }}>🔗 Semantic match</span>
+        )}
       </div>
 
       <div style={{
@@ -92,7 +101,7 @@ export function ProductCard({ hit, rank, sort, onClick }) {
             {hit.price.toFixed(2)}
           </span>
         ) : <span style={{ color: "#888", fontSize: 13 }}>Price N/A</span>}
-        {scorePercent && (
+        {scorePercent != null && (
           <span style={{ fontSize: 10, color: "#888", fontFamily: "'DM Mono', monospace" }}>
             {scorePercent}% match
           </span>
@@ -144,6 +153,15 @@ export function ProductModal({ hit, onClose }) {
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {hit.brand && <Badge>{hit.brand}</Badge>}
             {hit.category && <Badge color="#f0f0f0" textColor="#555">{hit.category}</Badge>}
+            {hit.semanticMatch && (
+              <span title="Found via semantic (vector) similarity — keyword search alone wouldn't have surfaced this product"
+                style={{
+                  background: "#f0e8fc", color: "#7c3aed",
+                  fontSize: 10, fontWeight: 700, padding: "2px 7px",
+                  borderRadius: 3, letterSpacing: 0.5, textTransform: "uppercase",
+                  fontFamily: "'DM Mono', monospace",
+                }}>🔗 Semantic match</span>
+            )}
           </div>
           <button onClick={onClose} style={{
             background: "none", border: "none", fontSize: 22,
