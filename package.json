@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "nexarank-content-sdk": "git+https://github.com/anupanupranjan-gif/nexarank-content-sdk.git#ed4c934",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.1",

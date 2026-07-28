@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { fetchSearch, CATEGORY_MAP } from "../api";
 import ResultsLayout from "../components/ResultsLayout";
+import CategoryBanner from "../components/CategoryBanner";
 
 export default function CategoryPage({ mode, onResultsChange }) {
   const { categoryLabel } = useParams();
@@ -70,22 +71,25 @@ export default function CategoryPage({ mode, onResultsChange }) {
   };
 
   return (
-    <ResultsLayout
-      title={`${catInfo.emoji} ${catInfo.display}`}
-      subtitle
-      results={results}
-      total={total}
-      tookMs={tookMs}
-      loading={loading}
-      error={error}
-      sort={sort}
-      brand={brand}
-      minPrice={minPrice}
-      maxPrice={maxPrice}
-      page={page}
-      mode={mode}
-      onFilterChange={handleFilterChange}
-      onPageChange={handlePageChange}
-    />
+    <>
+      <CategoryBanner category={decodedLabel} />
+      <ResultsLayout
+        title={`${catInfo.emoji} ${catInfo.display}`}
+        subtitle
+        results={results}
+        total={total}
+        tookMs={tookMs}
+        loading={loading}
+        error={error}
+        sort={sort}
+        brand={brand}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
+        page={page}
+        mode={mode}
+        onFilterChange={handleFilterChange}
+        onPageChange={handlePageChange}
+      />
+    </>
   );
 }

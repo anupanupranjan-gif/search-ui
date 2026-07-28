@@ -3,6 +3,15 @@ export const OLLAMA_BASE = process.env.REACT_APP_OLLAMA_BASE || "http://localhos
 export const OLLAMA_MODEL = "gemma3:1b";
 export const PAGE_SIZE = 20;
 
+// NR-86: options for nexarank-content-sdk's useNexarankContent hook — the
+// Experience Manager content-zone endpoint, a separate NexaRank deployment
+// from search-api's own /api/v1 (see REACT_APP_NEXARANK_CONTENT_BASE).
+export const NEXARANK_CONTENT_OPTIONS = {
+  baseUrl: process.env.REACT_APP_NEXARANK_CONTENT_BASE || "http://localhost/nexarank",
+  tenantId: "default",
+  projectId: "main",
+};
+
 // Stable per-visit session id — generated once and kept in sessionStorage so
 // searches and clicks within the same tab/visit share one id (survives page
 // navigation, cleared on tab close). Ties NexaRank's click-history

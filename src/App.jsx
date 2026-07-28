@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import Header from "./components/Header";
+import AnnouncementBar from "./components/AnnouncementBar";
 import ChatSidebar from "./components/ChatSidebar";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
@@ -18,6 +19,10 @@ const GLOBAL_STYLES = `
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes nr-shimmer {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
   }
   .product-grid > * { animation: fadeIn 0.25s ease both; }
   .product-grid > *:nth-child(1) { animation-delay: 0.02s; }
@@ -70,6 +75,7 @@ function AppShell() {
   return (
     <>
       <style>{GLOBAL_STYLES}</style>
+      <AnnouncementBar />
 
       {!isHome && (
         <Header
