@@ -53,6 +53,14 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
           maxPrice: opts.maxPrice ?? maxPrice,
           rewrite: rewrite ?? false,
         });
+        // NR-88 follow-up: a REDIRECT rule matched — navigate away instead of
+        // rendering results. window.location.href (not react-router's navigate())
+        // since redirectUrl can be an absolute https:// URL as well as a same-
+        // origin path.
+        if (data.redirectUrl) {
+          window.location.href = data.redirectUrl;
+          return;
+        }
         setTotal(data.total ?? 0);
         setTookMs(data.tookMs ?? null);
         setResults(data.hits ?? []);
