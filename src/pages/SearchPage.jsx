@@ -19,6 +19,12 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(0);
+  // NR-36: any configured facet beyond brand/category/minPrice/maxPrice
+  // (which each have their own dedicated state above) — previously these
+  // were silently dropped by handleFilterChange below, so a facet imported
+  // via "Fetch Fields from Engine" (NR-118) could be clicked in the sidebar
+  // but never actually filtered or reached facet usage reporting.
+  const [otherFacets, setOtherFacets] = useState({});
 
   const [askAnswer, setAskAnswer] = useState(null);
   const [askMode, setAskMode] = useState("answer");
@@ -52,6 +58,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
           minPrice: opts.minPrice ?? minPrice,
           maxPrice: opts.maxPrice ?? maxPrice,
           rewrite: rewrite ?? false,
+          facets: opts.facets ?? otherFacets,
         });
         // NR-88 follow-up: a REDIRECT rule matched — navigate away instead of
         // rendering results. window.location.href (not react-router's navigate())
@@ -75,7 +82,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
     } finally {
       setLoading(false);
     }
-  }, [query, mode, page, brand, category, minPrice, maxPrice, onResultsChange]);
+  }, [query, mode, page, brand, category, minPrice, maxPrice, otherFacets, onResultsChange]);
 
   useEffect(() => {
     if (query) doSearch({ q: query, page: 0 });
@@ -84,9 +91,16 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
   const handleFilterChange = (key, value) => {
     if (key === "sort") { setSort(value); return; }
     if (key === "brand") { setBrand(value); doSearch({ brand: value, page: 0 }); }
-    if (key === "category") { setCategory(value); doSearch({ category: value, page: 0 }); }
-    if (key === "minPrice") { setMinPrice(value); doSearch({ minPrice: value, page: 0 }); }
-    if (key === "maxPrice") { setMaxPrice(value); doSearch({ maxPrice: value, page: 0 }); }
+    else if (key === "category") { setCategory(value); doSearch({ category: value, page: 0 }); }
+    else if (key === "minPrice") { setMinPrice(value); doSearch({ minPrice: value, page: 0 }); }
+    else if (key === "maxPrice") { setMaxPrice(value); doSearch({ maxPrice: value, page: 0 }); }
+    else {
+      // NR-36: any other configured facet (fieldName from FacetSidebar) —
+      // single-value-select per field, same convention as brand/category.
+      const next = { ...otherFacets, [key]: value };
+      setOtherFacets(next);
+      doSearch({ facets: next, page: 0 });
+    }
     setPage(0);
   };
 

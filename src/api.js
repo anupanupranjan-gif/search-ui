@@ -104,13 +104,21 @@ export function sortResults(hits, sortId) {
   }
 }
 
-export async function fetchSearch({ q, mode, page, category, brand, minPrice, maxPrice, rewrite }) {
+export async function fetchSearch({ q, mode, page, category, brand, minPrice, maxPrice, rewrite, facets }) {
   const params = new URLSearchParams({ q, mode, size: PAGE_SIZE, page, sessionId: getSessionId() });
   if (category) params.set("category", category);
   if (brand) params.set("brand", brand);
   if (minPrice) params.set("minPrice", minPrice);
   if (maxPrice) params.set("maxPrice", maxPrice);
   if (rewrite) params.set("rewrite", "true");
+  // NR-36: any facet beyond the dedicated brand/category/price ones above
+  // (e.g. a facet imported via "Fetch Fields from Engine") — forwarded as
+  // facet_<field>=<value>, matching search-api's SearchController parsing.
+  if (facets) {
+    for (const [field, value] of Object.entries(facets)) {
+      if (value) params.set(`facet_${field}`, value);
+    }
+  }
   const res = await fetch(`${API_BASE}/search?${params}`, { headers: API_HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
