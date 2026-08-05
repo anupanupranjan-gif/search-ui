@@ -31,6 +31,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
   const [rewrittenQuery, setRewrittenQuery] = useState(null);
   const [originalQuery, setOriginalQuery] = useState(null);
   const [facets, setFacets] = useState(null);
+  const [recoveredQuery, setRecoveredQuery] = useState(null);
 
   const doSearch = useCallback(async (opts = {}) => {
     const q = opts.q ?? query;
@@ -74,6 +75,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
         setRewrittenQuery(data.rewrittenQuery ?? null);
         setOriginalQuery(data.originalQuery ?? null);
         setFacets(data.facets ?? null);
+        setRecoveredQuery(data.recovered ? data.recoveredQuery : null);
         onResultsChange?.(data.hits ?? [], q);
       }
     } catch (e) {
@@ -133,6 +135,7 @@ export default function SearchPage({ mode, chatResults, onResultsChange, rewrite
       rewrittenQuery={rewrittenQuery}
       originalQuery={originalQuery}
       facets={facets}
+      recoveredQuery={recoveredQuery}
     />
   );
 }

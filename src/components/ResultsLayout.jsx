@@ -27,6 +27,7 @@ export default function ResultsLayout({
   facets,
   category,
   query,
+  recoveredQuery,
 }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const sessionId = getSessionId();
@@ -97,6 +98,23 @@ export default function ResultsLayout({
             </div>
             <div style={{ color: "#aaa", marginTop: 2 }}>
               <span style={{ color: "#64a0ff" }}>Rewritten:</span> <span style={{ color: "#e0e0e0" }}>{rewrittenQuery}</span>
+            </div>
+          </div>
+        )}
+        {/* Zero-Result Recovery Banner (NR-59) — distinct from the rewrite
+            banner above: "{query}" itself found nothing, this is a fallback
+            retry with a different query, not an upfront expansion of it. */}
+        {recoveredQuery && (
+          <div style={{
+            background: "linear-gradient(135deg, #0f3460 0%, #16213e 100%)",
+            border: "1px solid rgba(100,160,255,0.3)",
+            borderRadius: 8,
+            padding: "10px 16px",
+            marginBottom: 12,
+            fontSize: 13,
+          }}>
+            <div style={{ color: "#64a0ff", fontWeight: 700 }}>
+              🤖 No results for "{query}" — showing results for "{recoveredQuery}" instead
             </div>
           </div>
         )}
